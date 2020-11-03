@@ -16,7 +16,7 @@ variable "Environment" {
 }
 
 variable "Limit" {
-  type = number
+  type = string
 }
 
 variable "Team" {
