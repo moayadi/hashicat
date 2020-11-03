@@ -1,0 +1,9 @@
+Limit = 10
+Team = "TeamAtom"
+Project  = "HashiCat"
+Environment = "Dev"
+ApplicationID = "hashi-0010"
+CostCenter = "CS00110"
+toStop = "true"
+Notification = "admin@boundarynetworks.com.au"
+TFC_WORKSPACE_NAME = "org-snapshot-test"
