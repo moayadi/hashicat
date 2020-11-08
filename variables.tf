@@ -67,7 +67,7 @@ variable "example" {
 
 variable "region" {
   description = "The region where the resources are created."
-  default     = "us-east-1"
+  default     = "ap-southeast-1"
 }
 
 variable "address_space" {
@@ -82,7 +82,7 @@ variable "subnet_prefix" {
 
 variable "instance_type" {
   description = "Specifies the AWS instance type."
-  default     = "m5.xlarge"
+  default     = "m5.2xlarge"
 }
 
 // variable "admin_username" {
