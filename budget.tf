@@ -6,5 +6,5 @@ module "workspace_budget" {
   limit             = var.Limit
   time_period_start = var.time_period_start
   subscriber_email = "admin@boundarynetworks.com.au"
-  }
 }
+
