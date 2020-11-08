@@ -2,6 +2,7 @@
 **/.terraform/*
 .idea
 .gitignore
+*.bak
 
 # .tfstate files
 *.tfstate

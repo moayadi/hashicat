@@ -206,3 +206,29 @@ resource aws_key_pair "hashicat" {
   key_name   = local.private_key_filename
   public_key = tls_private_key.hashicat.public_key_openssh
 }
+
+module "workspace_budget" {
+  source  = "app.terraform.io/moayadi/workspace-budget/aws"
+  version = "0.2.1"
+
+  workspace_name    = var.TFC_WORKSPACE_NAME
+  limit             = var.Limit
+  time_period_start = var.time_period_start
+  subscriber_email = var.Notification
+}
+
+module "lambda-scheduler-stop" {
+  source  = "app.terraform.io/moayadi/lambda-scheduler-stop-start/aws"
+  version = "2.10.0"
+  name                           = "${var.TFC_WORKSPACE_NAME}_ec2_stop"
+  cloudwatch_schedule_expression = "cron(00 20 * * ? *)"
+  schedule_action                = "stop"
+  ec2_schedule                   = "true"
+  rds_schedule                   = "false"
+  autoscaling_schedule           = "false"
+  resources_tag                  = {
+    key   = "Environment"
+    value = "dev"
+  }
+  tags = local.common_tags
+}
