@@ -10,7 +10,6 @@ common_tags = {
   Team = var.Team,
   ApplicationID = var.ApplicationID,
   CostCenter = var.CostCenter,
-  Limit = var.Limit,
   Workspace = var.TFC_WORKSPACE_NAME
 }
 }

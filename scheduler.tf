@@ -11,7 +11,8 @@ module "lambda-scheduler-stop" {
     key   = "tostop"
     value = "true"
   }
-}
+  tags = local.common_tags
+} 
 
 
 module "lambda-scheduler-start" {
@@ -27,4 +28,5 @@ module "lambda-scheduler-start" {
     key   = "tostop"
     value = "true"
   }
+  tags = local.common_tags
 }
