@@ -1,6 +1,6 @@
 module "workspace_budget" {
   source  = "app.terraform.io/moayadi/workspace-budget/aws"
-  version = "0.2.1"
+  version = "0.2.2"
 
   workspace_name    = var.TFC_WORKSPACE_NAME
   limit             = var.Limit
