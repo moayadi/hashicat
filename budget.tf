@@ -1,6 +1,6 @@
 module "workspace_budget" {
   source  = "app.terraform.io/moayadi/workspace-budget/aws"
-  version = "0.1.6"
+  version = "0.1.7"
 
   limit             = var.Limit
   time_period_start = var.time_period_start
