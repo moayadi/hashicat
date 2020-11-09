@@ -146,6 +146,7 @@ resource aws_instance "hashicat" {
 
   tags = {
     Name          = "${var.prefix}-hashicat-instance",
+    Environment   = var.Environment,
     Project       = var.Project,
     Team          = var.Team,
     ApplicationID = var.ApplicationID,
@@ -210,4 +211,12 @@ resource aws_key_pair "hashicat" {
   public_key = tls_private_key.hashicat.public_key_openssh
 }
 
+module "workspace_budget" {
+  source  = "app.terraform.io/moayadi/workspace-budget/aws"
+
+  workspace_name    = var.TFC_WORKSPACE_NAME
+  limit             = var.Limit
+  time_period_start = var.time_period_start
+  subscriber_email = var.Notification
+}
 
