@@ -138,7 +138,7 @@ resource "aws_eip_association" "hashicat" {
 resource aws_instance "hashicat" {
   ami = data.aws_ami.ubuntu.id
   # instance_type               = var.instance_type
-  instance_type               = "t3.2xlarge"
+  instance_type               = "t3.xlarge"
   key_name                    = aws_key_pair.hashicat.key_name
   associate_public_ip_address = true
   subnet_id                   = aws_subnet.hashicat.id
@@ -146,6 +146,7 @@ resource aws_instance "hashicat" {
 
   tags = {
     Name          = "${var.prefix}-hashicat-instance",
+    Environment   = var.Environment,
     Project       = var.Project,
     Team          = var.Team,
     ApplicationID = var.ApplicationID,
@@ -217,4 +218,20 @@ module "workspace_budget" {
   limit             = var.Limit
   time_period_start = var.time_period_start
   subscriber_email = var.Notification
+}
+
+module "lambda-scheduler-stop" {
+  source  = "app.terraform.io/moayadi/lambda-scheduler-stop-start/aws"
+  version = "2.10.0"
+  name                           = "${var.TFC_WORKSPACE_NAME}_ec2_stop"
+  cloudwatch_schedule_expression = "cron(00 20 * * ? *)"
+  schedule_action                = "stop"
+  ec2_schedule                   = "true"
+  rds_schedule                   = "false"
+  autoscaling_schedule           = "false"
+  resources_tag                  = {
+    key   = "Environment"
+    value = "dev"
+  }
+  tags = local.common_tags
 }
