@@ -7,7 +7,7 @@
 
 
 variable "TFC_WORKSPACE_NAME" {
-  type = string
+  type    = string
   default = "" # An error occurs when you are running TF backend other than Terraform Cloud
 }
 
@@ -40,18 +40,18 @@ variable "Notification" {
 }
 
 variable "filter" {
-  type = string
+  type    = string
   default = "Workspace"
 }
 
 variable "tostop" {
-  type = string
+  type    = string
   default = "true"
 }
 
 
 variable "time_period_start" {
-  type= string
+  type    = string
   default = "2020-10-01_00:00"
 }
 
@@ -62,7 +62,7 @@ variable "prefix" {
 
 variable "example" {
   description = "variable passed on from SNOW"
-  default="MolleY"
+  default     = "MolleY"
 }
 
 variable "region" {
@@ -82,7 +82,7 @@ variable "subnet_prefix" {
 
 variable "instance_type" {
   description = "Specifies the AWS instance type."
-  default     = "t3.2xlarge"
+  default     = "t3.xlarge"
 }
 
 // variable "admin_username" {

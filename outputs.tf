@@ -4,7 +4,7 @@ output "catapp_url" {
 }
 
 output "vpc_id" {
-  value =  aws_vpc.hashicat.id
+  value = aws_vpc.hashicat.id
 }
 
 output "subnet_id" {

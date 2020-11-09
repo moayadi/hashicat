@@ -4,14 +4,14 @@ provider "aws" {
 }
 
 locals {
-common_tags = {
-  Environment = var.Environment,
-  Project = var.Project,
-  Team = var.Team,
-  ApplicationID = var.ApplicationID,
-  CostCenter = var.CostCenter,
-  Workspace = var.TFC_WORKSPACE_NAME
-}
+  common_tags = {
+    Environment   = var.Environment,
+    Project       = var.Project,
+    Team          = var.Team,
+    ApplicationID = var.ApplicationID,
+    CostCenter    = var.CostCenter,
+    Workspace     = var.TFC_WORKSPACE_NAME
+  }
 }
 
 
@@ -20,11 +20,11 @@ resource aws_vpc "hashicat" {
   enable_dns_hostnames = true
 
   tags = merge(local.common_tags,
-  {
-    Name = "${var.prefix}-vpc"
-  }
+    {
+      Name = "${var.prefix}-vpc"
+    }
   )
-  }
+}
 
 
 resource aws_subnet "hashicat" {
@@ -32,9 +32,9 @@ resource aws_subnet "hashicat" {
   cidr_block = var.subnet_prefix
 
   tags = merge(local.common_tags,
-  {
-    Name = "${var.prefix}-subnet"
-  }
+    {
+      Name = "${var.prefix}-subnet"
+    }
   )
 }
 
@@ -47,7 +47,7 @@ resource aws_security_group "hashicat" {
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
-    cidr_blocks = ["121.6.14.14/32","0.0.0.0/0"]
+    cidr_blocks = ["121.6.14.14/32", "0.0.0.0/0"]
   }
 
   ingress {
@@ -73,9 +73,9 @@ resource aws_security_group "hashicat" {
   }
 
   tags = merge(local.common_tags,
-  {
-    Name = "${var.prefix}-security-group"
-  }
+    {
+      Name = "${var.prefix}-security-group"
+    }
   )
 }
 
@@ -88,9 +88,9 @@ resource aws_internet_gateway "hashicat" {
   vpc_id = aws_vpc.hashicat.id
 
   tags = merge(local.common_tags,
-  {
-    Name = "${var.prefix}-internet-gateway"
-  }
+    {
+      Name = "${var.prefix}-internet-gateway"
+    }
   )
 }
 
@@ -136,7 +136,7 @@ resource "aws_eip_association" "hashicat" {
 }
 
 resource aws_instance "hashicat" {
-  ami                         = data.aws_ami.ubuntu.id
+  ami = data.aws_ami.ubuntu.id
   # instance_type               = var.instance_type
   instance_type               = var.instance_type
   key_name                    = aws_key_pair.hashicat.key_name
@@ -145,14 +145,15 @@ resource aws_instance "hashicat" {
   vpc_security_group_ids      = [aws_security_group.hashicat.id]
 
   tags = {
-    Name = "${var.prefix}-hashicat-instance",
-    Project = var.Project,
-    Team = var.Team,
+    Name          = "${var.prefix}-hashicat-instance",
+    Environment   = var.Environment,
+    Project       = var.Project,
+    Team          = var.Team,
     ApplicationID = var.ApplicationID,
-    CostCenter = var.CostCenter,
-    Workspace = var.TFC_WORKSPACE_NAME
+    CostCenter    = var.CostCenter,
+    Workspace     = var.TFC_WORKSPACE_NAME
   }
-  
+
 }
 
 # We're using a little trick here so we can run the provisioner without
@@ -208,5 +209,29 @@ locals {
 resource aws_key_pair "hashicat" {
   key_name   = local.private_key_filename
   public_key = tls_private_key.hashicat.public_key_openssh
+}
+
+module "workspace_budget" {
+  source  = "app.terraform.io/moayadi/workspace-budget/aws"
+
+  workspace_name    = var.TFC_WORKSPACE_NAME
+  limit             = var.Limit
+  time_period_start = var.time_period_start
+  subscriber_email = var.Notification
+}
+
+module "lambda-scheduler-stop" {
+  source  = "app.terraform.io/moayadi/lambda-scheduler-stop-start/aws"
+  name                           = "${var.TFC_WORKSPACE_NAME}_ec2_stop"
+  cloudwatch_schedule_expression = "cron(00 12 * * ? *)"
+  schedule_action                = "stop"
+  ec2_schedule                   = "true"
+  rds_schedule                   = "false"
+  autoscaling_schedule           = "false"
+  resources_tag                  = {
+    key   = "Environment"
+    value = "dev"
+  }
+  tags = local.common_tags
 }
 
