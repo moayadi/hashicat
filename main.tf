@@ -138,7 +138,7 @@ resource "aws_eip_association" "hashicat" {
 resource aws_instance "hashicat" {
   ami = data.aws_ami.ubuntu.id
   # instance_type               = var.instance_type
-  instance_type               = "t3.xlarge"
+  instance_type               = "m5.xlarge"
   key_name                    = aws_key_pair.hashicat.key_name
   associate_public_ip_address = true
   subnet_id                   = aws_subnet.hashicat.id
