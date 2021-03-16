@@ -1,7 +1,7 @@
 Limit = 10
 Team = "TeamAtom"
 Project  = "HashiCat"
-Environment = "Dev"
+Environment = "Prod"
 ApplicationID = "hashi-0010"
 CostCenter = "CS00110"
 toStop = "true"

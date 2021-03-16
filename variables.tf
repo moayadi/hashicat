@@ -82,7 +82,7 @@ variable "subnet_prefix" {
 
 variable "instance_type" {
   description = "Specifies the AWS instance type."
-  default     = "m5.4xlarge"
+  default     = "t3.xlarge"
 }
 
 // variable "admin_username" {
